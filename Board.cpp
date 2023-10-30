@@ -34,14 +34,16 @@ bool Board::findEmptyPos(int& x, int& y) {
 }
 
 bool Board::safePos(int n, int x, int y) {
+    int sqN = (int)sqrt(this->N);
     return this->board[y][x] == Board::EMPTY &&
             !this->row[y][n-1] &&
             !this->col[x][n-1] && 
-            !this->box[3*(y/3) + (x/3)][n-1];
+            !this->box[sqN*(y/sqN) + (x/sqN)][n-1];
 }
 
 void Board::setTo(int n, int x, int y, bool setting) {
-    this->row[y][n-1] = this->col[x][n-1] = this->box[3*(y/3) + (x/3)][n-1] = setting;
+    int sqN = (int)sqrt(this->N);
+    this->row[y][n-1] = this->col[x][n-1] = this->box[sqN*(y/sqN) + (x/sqN)][n-1] = setting;
 }
 
 void Board::delete_auxilliary() {
@@ -78,6 +80,8 @@ Board::Board(const vector<vector<int>>& board) {
             this->row[i][j] = this->col[i][j] = this->box[i][j] = false;
     }
 
+    int sqN = (int)sqrt(this->N);
+
     // Fill all the present number into the auxilliary spaces
     for (int i=0; i<this->N; ++i) {
         for (int j=0; j<this->N; ++j) {
@@ -85,7 +89,7 @@ Board::Board(const vector<vector<int>>& board) {
             if (n == Board::EMPTY)
                 continue;
         
-            row[i][n-1] = col[j][n-1] = box[3*(i/3) + (j/3)][n-1] = true;
+            row[i][n-1] = col[j][n-1] = box[sqN*(i/sqN) + (j/sqN)][n-1] = true;
         }
     }
 }
